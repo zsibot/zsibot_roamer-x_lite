@@ -27,7 +27,7 @@ namespace jszr_tf
 
     bool BaseTF::InitParams()
     {
-        node_.lock()->declare_parameter("platform", "NX_YSC3588");
+        node_.lock()->declare_parameter("platform", "NX_XG3588");
         node_.lock()->declare_parameter("mc_odom_topic", "/odom/mc_odom");
         node_.lock()->declare_parameter("uniform_odom_topic", "/odom/ground_truth");
         node_.lock()->declare_parameter("joint_states_topic", "/joint_states/mc");

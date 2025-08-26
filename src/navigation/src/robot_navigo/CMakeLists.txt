@@ -257,7 +257,7 @@ install(TARGETS costmap_listener
 # install(TARGETS detector_node
 #         DESTINATION lib/${PROJECT_NAME}
 # )
-install(DIRECTORY launch params 
+install(DIRECTORY launch params map
         DESTINATION share/${PROJECT_NAME}
         DIRECTORY_PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE
         GROUP_READ GROUP_WRITE GROUP_EXECUTE

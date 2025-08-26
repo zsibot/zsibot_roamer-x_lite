@@ -1,2 +1,403 @@
-# zsibot_RoamerX_Lite
-Open-source navigation stack for ZsiBot robots. Enables intelligent SLAM, path planning and autonomous movement. Free community version (Lite). Contributions welcome!
+# ZsiBot RoamerX Lite
+
+<div align="center">
+<img src="https://img.shields.io/badge/ROS2-Humble-blue" alt="ROS2 Humble">
+<img src="https://img.shields.io/badge/License-Open%20Source-green" alt="License">
+<img src="https://img.shields.io/badge/Platform-Linux-lightgrey" alt="Platform">
+<img src="https://img.shields.io/badge/Language-C++-red" alt="Language">
+</div>
+
+**Open-source navigation stack for ZsiBot robots. Enables intelligent SLAM, path planning and autonomous movement. Free community version (Lite). Contributions welcome!**
+
+## 🚀 Features
+
+- **Complete Navigation Stack**: Based on ROS2 Nav2 with custom enhancements
+- **Multi-Platform Support**: Gazebo/UE simulation, NX/3588 hardware platforms
+- **Advanced Path Planning**: NavFn planner with MPPI controller
+- **Flexible Communication**: Support for UDP and LCM protocols
+- **Behavior Trees**: Sophisticated autonomous navigation logic
+- **Real-time Obstacle Avoidance**: Advanced costmap-based collision detection
+- **Transform Management**: Comprehensive coordinate frame handling
+- **Open Source**: Community-driven development with full source access
+
+## 📋 Table of Contents
+
+- [System Requirements](#system-requirements)
+- [Installation](#installation)
+- [Quick Start](#quick-start)
+- [Architecture Overview](#architecture-overview)
+- [Usage Examples](#usage-examples)
+- [Configuration](#configuration)
+- [Contributing](#contributing)
+- [Troubleshooting](#troubleshooting)
+- [License](#license)
+
+## 🔧 System Requirements
+
+### Operating System
+- **Ubuntu 22.04 LTS** (Jammy)
+- **ROS2 Humble Hawksbill**
+
+### Hardware Requirements
+- **CPU**: x86_64 or ARM64 (for hardware deployment)
+- **RAM**: Minimum 4GB (8GB recommended)
+- **Storage**: At least 10GB free space
+
+### Dependencies
+- Gazebo (for simulation)
+- OpenCV
+- PCL (Point Cloud Library)
+- OMPL (Open Motion Planning Library)
+- Behavior Tree CPP
+
+## 📦 Installation
+
+### 1. Install ROS2 Humble
+
+```bash
+# Add ROS2 apt repository
+sudo apt update && sudo apt install curl gnupg lsb-release
+sudo curl -sSL https://raw.githubusercontent.com/ros/rosdistro/master/ros.key -o /usr/share/keyrings/ros-archive-keyring.gpg
+echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/ros-archive-keyring.gpg] http://packages.ros.org/ros2/ubuntu $(source /etc/os-release && echo $UBUNTU_CODENAME) main" | sudo tee /etc/apt/sources.list.d/ros2.list > /dev/null
+
+# Install ROS2 Humble
+sudo apt update
+sudo apt install ros-humble-desktop
+```
+
+### 2. Clone and Setup the Repository
+
+```bash
+# Clone the repository
+git clone https://github.com/your-org/zsibot_RoamerX_Lite.git
+cd zsibot_RoamerX_Lite
+
+# Install all dependencies
+chmod +x script/dep/install_all.sh
+./script/dep/install_all.sh
+```
+
+### 3. Build the Project
+
+```bash
+# Source ROS2 environment
+source /opt/ros/humble/setup.bash
+
+# Build all packages
+./build.sh all
+```
+
+### 4. Source the Workspace
+
+```bash
+# Source the built workspace
+source install/setup.bash
+```
+
+## 🚀 Quick Start
+
+### Simulation with Gazebo
+
+#### 🔹 Single Point Navigation
+1. **Launch Navigation Stack:**
+```bash
+ros2 launch robot_navigo navigation_bringup.launch.py \
+    platform:=GAZEBO \
+    mc_controller_type:=RL_TRACK_VELOCITY \
+    communication_type:=LCM \
+    map:=/path/to/your/neighborhood_map.yaml
+
+ros2 launch pub_tf pub_tf.launch.py tf_type:=gazebo_tf
+```
+
+2. **Launch Gazebo to Give Odom Info**
+
+3. **Launch RViz to Send Navigation Goals:**
+   - Use "2D Goal Pose" tool in RViz2 to send navigation commands
+   - Demo results:
+     - 🟢 Static Avoidance
+        ![single point with static avoidance](demo_gif/single_static.gif)
+        
+     - 🔵 Dynamic Avoidance
+        ![single point with dynamic avoidance](demo_gif/single_dynamic.gif)
+
+#### Patrol Task Navigation
+1. **Launch Navigation Stack:**
+```bash
+ros2 launch robot_navigo navigation_bringup.launch.py \
+    platform:=GAZEBO \
+    mc_controller_type:=RL_TRACK_VELOCITY \
+    communication_type:=LCM \
+    map:=/path/to/your/neighborhood_map.yaml
+
+ros2 launch pub_tf pub_tf.launch.py tf_type:=gazebo_tf
+```
+
+2. **Launch Gazebo to Give Odom Info**
+
+3. **Launch RViz to Send Navigation Goals:**
+   - Use "nav2_rviz_plugins" Panel in RViz2 to send navigation commands
+   - Demo results:
+     - patrol task with multiple midpoints 
+        ![patrol task with avoidance](demo_gif/patrol.gif)
+
+### 🔹 Simulation with UE + Mujoco
+1. **Launch Navigation Stack:**
+```bash
+ros2 launch robot_navigo navigation_bringup.launch.py \
+    platform:=NX \
+    mc_controller_type:=RL_TRACK_VELOCITY \
+    communication_type:=LCM \
+    map:=/path/to/your/ue_old_building_with_stairs.yaml
+
+ros2 launch pub_tf pub_tf.launch.py tf_type:=mujoco_tf
+```
+
+2. **Launch UE and Mujoco to Give Odom Info**
+
+3. **Launch RViz to Send Navigation Goals:**
+   - Use "nav2_rviz_plugins" Panel in RViz2 to send navigation commands
+   - Demo results:
+     - patrol task with multiple midpoints 
+       <video src="demo_gif/ue.mp4" autoplay loop muted /> 
+       
+### Hardware Deployment
+
+For physical robot deployment:
+
+```bash
+TODO
+```
+
+## 🏗️ Architecture Overview
+
+The ZsiBot RoamerX Lite stack is organized into three main modules:
+
+### 🔄 Forward Module (`src/forward/`)
+- **ecal2ros**: Bridge between eCAL and ROS2 communication systems
+- **jszr_tf**: Transform management for robot coordinate frames
+  - Base transforms
+  - Gazebo simulation transforms  
+  - Localization transforms
+  - Mujoco physics simulation support
+
+### 📡 Interface Module (`src/interface/`)
+- **mc_sdk_rosmsgs**: Motion controller SDK message definitions
+- **robots_dog_msgs**: Comprehensive robot message types including:
+  - Navigation commands and states
+  - Sensor data (IMU, odometry, localization)
+  - Motor control and telemetry
+  - Fault reporting and monitoring
+
+### 🧭 Navigation Module (`src/navigation/src/`)
+
+#### Core Navigation Components
+- **navigo_bt_navigator**: Behavior tree-based navigation orchestration
+- **navigo_mppi_controller**: Model Predictive Path Integral controller for dynamic path following
+- **navigo_costmap_2d**: 2D costmap generation with obstacle detection
+- **navigo_path_planner**: Global path planning services
+- **navigo_navfn_planner**: NavFn-based path planning algorithm
+
+#### Supporting Services
+- **navigo_behaviors**: Navigation behavior implementations (spin, backup, wait)
+- **navigo_collision_monitor**: Real-time collision detection and avoidance
+- **navigo_map_server**: Map loading and serving capabilities
+- **navigo_waypoint_follower**: Multi-waypoint navigation execution
+- **navigo_velocity_optimizer**: Velocity command smoothing and optimization
+
+#### Integration Layer
+- **robot_navigo**: Robot-specific integration, launch files, and parameter configurations
+
+## 💡 Usage Examples
+
+### Basic Navigation Commands
+
+```bash
+# 1. Start the navigation stack
+ros2 launch robot_navigo navigation_bringup.launch.py \
+    platform:=GAZEBO \
+    mc_controller_type:=RL_TRACK_VELOCITY \
+    communication_type:=LCM
+
+# 2. Load a map (in another terminal) 
+ros2 service call /map_server/load_map nav2_msgs/srv/LoadMap \
+    "{map_url: '/path/to/map.yaml'}"
+
+# 3. Pub tf
+ ros2 launch pub_tf pub_tf.launch.py tf_type:=gazebo_tf
+
+# 4. Send navigation goal
+ros2 action send_goal /navigate_to_pose nav2_msgs/action/NavigateToPose \
+    "{pose: {header: {frame_id: 'map'}, pose: {position: {x: 2.0, y: 1.0, z: 0.0}, 
+    orientation: {w: 1.0}}}}"
+```
+
+### Waypoint Navigation
+
+```bash
+# Navigate through multiple waypoints
+ros2 action send_goal /navigate_through_poses nav2_msgs/action/NavigateThroughPoses \
+    "{poses: [
+        {header: {frame_id: 'map'}, pose: {position: {x: 1.0, y: 0.0, z: 0.0}, orientation: {w: 1.0}}},
+        {header: {frame_id: 'map'}, pose: {position: {x: 2.0, y: 1.0, z: 0.0}, orientation: {w: 1.0}}},
+        {header: {frame_id: 'map'}, pose: {position: {x: 1.0, y: 2.0, z: 0.0}, orientation: {w: 1.0}}}
+    ]}"
+```
+
+### Map Building with SLAM
+
+```bash
+TODO
+```
+
+## ⚙️ Configuration
+
+### Platform Configuration
+
+The system supports multiple platform configurations:
+
+| Platform | Description | Use Case |
+|----------|-------------|----------|
+| `GAZEBO` | Gazebo simulation | Development and testing |
+| `NX_XG3588` | XG3588 hardware platform | High-performance deployment |
+| `XG3588` | Standalone XG3588 | Custom hardware integration |
+
+### Controller Types
+
+| Controller Type | Description | Application |
+|----------------|-------------|-------------|
+| `RL_TRACK_VELOCITY` | Velocity-based tracking | Simple navigation tasks |
+| `RL_TRACK_PATH` | Path-following controller | Precise trajectory following |
+
+### Communication Protocols
+
+| Protocol | Description | Use Case |
+|----------|-------------|----------|
+| `UDP` | Direct UDP communication | Low-latency, embedded systems |
+| `LCM` | Lightweight Communications | Multi-process, distributed systems |
+
+### Parameter Files
+
+Main configuration file: `src/navigation/src/robot_navigo/params/navigo_params.yaml`
+
+Key configuration sections:
+- **bt_navigator**: Behavior tree settings
+- **controller_server**: MPPI controller parameters
+- **local_costmap**: Local obstacle avoidance settings
+- **global_costmap**: Global path planning costmap
+- **planner_server**: Path planning algorithm settings
+
+## 🔨 Development
+
+### Building Individual Packages
+
+```bash
+# Build specific package
+colcon build --packages-select <package_name>
+
+# Build with debug symbols
+./build.sh all debug
+```
+
+### Code Formatting
+
+```bash
+# Format all C++ code
+./format.sh
+
+# Format specific directory
+./format.sh /path/to/directory
+```
+
+### Running Tests
+
+```bash
+# Run all tests
+colcon test
+
+# Run tests for specific package
+colcon test --packages-select <package_name>
+```
+
+## 🐛 Troubleshooting
+
+### Common Issues
+
+**1. Build Errors**
+```bash
+# Clean and rebuild
+rm -rf build install log
+./build.sh all
+```
+
+**2. Transform Errors**
+```bash
+# Check transform tree
+ros2 run tf2_tools view_frames
+
+# Monitor transform publication
+ros2 topic echo /tf
+```
+
+**3. Navigation Not Starting**
+```bash
+# Check required parameters
+ros2 param list /bt_navigator
+ros2 param get /bt_navigator use_sim_time
+```
+
+**4. Map Loading Issues**
+```bash
+# Verify map file path and format
+ros2 topic echo /map --once
+```
+
+## 🤝 Contributing
+
+We welcome contributions from the community! Here's how to get involved:
+
+### Development Workflow
+
+1. **Fork the repository**
+2. **Create a feature branch**: `git checkout -b feature/amazing-feature`
+3. **Make your changes** following our coding standards
+4. **Run tests**: `colcon test`
+5. **Format code**: `./format.sh`
+6. **Commit changes**: `git commit -m 'Add amazing feature'`
+7. **Push to branch**: `git push origin feature/amazing-feature`
+8. **Submit a Pull Request**
+
+### Coding Standards
+
+- Follow [ROS2 C++ Style Guide](https://docs.ros.org/en/rolling/Contributing/Code-Style-Language-Versions.html)
+- Use `clang-format` for consistent formatting
+- Write comprehensive comments and documentation
+- Include unit tests for new features
+
+### Reporting Issues
+
+Please use [GitHub Issues](https://github.com/your-org/zsibot_RoamerX_Lite/issues) to report bugs or request features.
+
+Include:
+- Operating system and ROS2 version
+- Hardware platform
+- Steps to reproduce the issue
+- Expected vs actual behavior
+- Relevant log output
+
+## 📄 License
+
+This project is released under the **Open Source License**. See [LICENSE](LICENSE) file for details.
+
+## 🙏 Acknowledgments
+
+- **ROS2 Community** for the excellent navigation framework
+- **Nav2 Team** for the robust navigation stack
+- **Contributors** who help improve this project
+- **ZsiBot Community** for feedback and testing
+
+---
+
+<div align="center">
+Made with ❤️ by the ZsiBot Community
+</div>
