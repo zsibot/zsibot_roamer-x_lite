@@ -1,0 +1,21 @@
+[package]
+name = "robot-forward"
+version = "0.1.0"
+description = "robot-forward"
+authors = ["kanonwy"]
+categories = ["forward"]
+keywords = ["ros2", "forward"]
+
+[package.metadata.deb]
+maintainer = "jialomg62<jialomg62@gmail.com>"
+copyright = "2025, jialomg62<jialomg62@gmail.com>"
+extended-description = "driver"
+depends = "$auto"
+section = "utility"
+revision = ""
+priority = "optional"
+release-info = """\
+robot-forward"""
+assets = [
+    ["install", "opt/robot/robot-forward/", "default"],
+]

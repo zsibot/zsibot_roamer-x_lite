@@ -1,0 +1,10 @@
+__pycache__
+.idea
+.vscode
+build
+install
+log
+cmake-build
+cmake-build-debug
+cmake-build-release
+.cache
