@@ -36,8 +36,7 @@ all)
     navigo_waypoint_follower \
     pub_tf \
     robot_bringup \
-    robot_navigo \
-    xg_description --parallel-workers 8
+    robot_navigo  --parallel-workers 8
   echo "[zsibot shell log] => "
   echo "[zsibot shell log] => OK"
 
