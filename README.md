@@ -157,9 +157,9 @@ ros2 launch pub_tf pub_tf.launch.py tf_type:=mujoco_tf
 
 3. **Launch RViz to Send Navigation Goals:**
    - Use "nav2_rviz_plugins" Panel in RViz2 to send navigation commands
-   - Demo results:
+   - Demo results (Note: Check the clear GIFs in the demo_gif folder.):
      - patrol task with multiple midpoints 
-       <video src="demo_gif/ue.mp4" autoplay loop muted /> 
+       -   ![patrol task with avoidance](demo_gif/ue_mini.gif)
        
 ### Hardware Deployment
 
