@@ -212,6 +212,17 @@ The ZsiBot RoamerX Lite stack is organized into three main modules:
 #### Integration Layer
 - **robot_navigo**: Robot-specific integration, launch files, and parameter configurations
 
+###  SLAM Module (`src/slam/src/`)
+
+#### Core Mapping Components
+
+- **3D pcd map**: It can generate a 3D pcd point cloud global map
+- **2D grid map**: It can generate 2D global occupation raster maps
+
+#### Supporting Services
+
+- **mapping state **: Control the different states of the mapping( start mapping、save map)
+
 ## 💡 Usage Examples
 
 ### Basic Navigation Commands
@@ -254,7 +265,17 @@ ros2 action send_goal /navigate_through_poses nav2_msgs/action/NavigateThroughPo
 ### Map Building with SLAM
 
 ```bash
-TODO
+# Run Robot SLAM 
+ros2 launch robot_slam slam.launch.py
+
+# Start Mapping
+ros2 service call /slam_state_service robots_dog_msgs/srv/MapState "{data: 3}"
+
+# Save Map 
+ros2 service call /slam_state_service robots_dog_msgs/srv/MapState "{data: 5}"
+
+#Note: map data is saved by default in the main directory under./jszr/map
+#      For specific operations, please refer to the readme of slam
 ```
 
 ## ⚙️ Configuration
@@ -331,6 +352,7 @@ colcon test --packages-select <package_name>
 ### Common Issues
 
 **1. Build Errors**
+
 ```bash
 # Clean and rebuild
 rm -rf build install log
