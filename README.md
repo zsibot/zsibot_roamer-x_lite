@@ -69,8 +69,8 @@ sudo apt install ros-humble-desktop
 
 ```bash
 # Clone the repository
-git clone https://github.com/your-org/zsibot_RoamerX_Lite.git
-cd zsibot_RoamerX_Lite
+git clone https://github.com/zsibot/zsibot_roamer-x_lite.git
+cd zsibot_roamerx_lite
 
 # Install all dependencies
 chmod +x script/dep/install_all.sh
@@ -131,6 +131,8 @@ ros2 launch robot_navigo navigation_bringup.launch.py \
     map:=/path/to/your/neighborhood_map.yaml
 
 ros2 launch pub_tf pub_tf.launch.py tf_type:=gazebo_tf
+
+rviz2 -d /path/to/your/rviz2_config.rviz
 ```
 
 2. **Launch Gazebo to Give Odom Info**
@@ -151,6 +153,8 @@ ros2 launch robot_navigo navigation_bringup.launch.py \
     map:=/path/to/your/ue_old_building_with_stairs.yaml
 
 ros2 launch pub_tf pub_tf.launch.py tf_type:=mujoco_tf
+
+rviz2 -d /path/to/your/rviz2_config.rviz
 ```
 
 2. **Launch UE and Mujoco to Give Odom Info**
@@ -226,7 +230,10 @@ ros2 service call /map_server/load_map nav2_msgs/srv/LoadMap \
 # 3. Pub tf
  ros2 launch pub_tf pub_tf.launch.py tf_type:=gazebo_tf
 
-# 4. Send navigation goal
+# 4. Rviz
+ rviz2 -d /path/to/your/rviz2_config.rviz
+
+# 5. Send navigation goal
 ros2 action send_goal /navigate_to_pose nav2_msgs/action/NavigateToPose \
     "{pose: {header: {frame_id: 'map'}, pose: {position: {x: 2.0, y: 1.0, z: 0.0}, 
     orientation: {w: 1.0}}}}"
