@@ -35,8 +35,9 @@ all)
     navigo_util \
     navigo_velocity_optimizer \
     navigo_waypoint_follower \
-    pub_tf \
-    robot_bringup \
+    fast_gicp \
+    ndt_omp \
+    localization \
     robot_navigo  --parallel-workers 8
   echo "[zsibot shell log] => "
   echo "[zsibot shell log] => OK"

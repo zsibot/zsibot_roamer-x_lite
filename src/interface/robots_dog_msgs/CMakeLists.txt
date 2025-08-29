@@ -54,6 +54,9 @@ set(msg_files
 
 set(srv_files
         "srv/RecordPath.srv"
+        "srv/MapState.srv"
+        "srv/LoadMap.srv"
+        "srv/LocalizationState.srv"
 )
 
 # 使用rosidl生成器生成自定义消息
