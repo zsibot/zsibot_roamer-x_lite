@@ -105,7 +105,7 @@ ros2 launch robot_navigo navigation_bringup.launch.py \
     platform:=GAZEBO \
     mc_controller_type:=RL_TRACK_VELOCITY \
     communication_type:=LCM \
-    map:=/path/to/your/neighborhood_map.yaml
+    map:=/path/to/map/map.yaml
 
 ros2 launch pub_tf pub_tf.launch.py tf_type:=gazebo_tf
 ```
@@ -128,7 +128,7 @@ ros2 launch robot_navigo navigation_bringup.launch.py \
     platform:=GAZEBO \
     mc_controller_type:=RL_TRACK_VELOCITY \
     communication_type:=LCM \
-    map:=/path/to/your/neighborhood_map.yaml
+    map:=/path/to/map/map.yaml
 
 ros2 launch pub_tf pub_tf.launch.py tf_type:=gazebo_tf
 
@@ -147,10 +147,10 @@ rviz2 -d /path/to/your/rviz2_config.rviz
 1. **Launch Navigation Stack:**
 ```bash
 ros2 launch robot_navigo navigation_bringup.launch.py \
-    platform:=NX \
+    platform:=UE \
     mc_controller_type:=RL_TRACK_VELOCITY \
-    communication_type:=LCM \
-    map:=/path/to/your/ue_old_building_with_stairs.yaml
+    communication_type:=UDP \
+    map:=/path/to/map/map.yaml
 
 ros2 launch pub_tf pub_tf.launch.py tf_type:=mujoco_tf
 

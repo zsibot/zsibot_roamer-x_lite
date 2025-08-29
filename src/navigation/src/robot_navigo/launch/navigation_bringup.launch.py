@@ -166,7 +166,7 @@ def generate_launch_description():
 
     platform_warn_log = LogInfo(
         condition=IfCondition(PythonExpression(["'", LaunchConfiguration('platform'), "' == 'NO_SPECIFIED'"])),
-        msg="\033[1;31mWarning: You have not specified the 'platform'. [platform:=GAZEBO || platform:=NX_XG3588 || platform:=XG3588] Early Terminated\033[0m"
+        msg="\033[1;31mWarning: You have not specified the 'platform'. [platform:=GAZEBO || platform:=UE platform:=NX_XG3588 || platform:=XG3588] Early Terminated\033[0m"
     )
 
     mc_controller_type_warn_log = LogInfo(
