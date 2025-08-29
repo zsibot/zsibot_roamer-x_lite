@@ -223,6 +223,15 @@ The ZsiBot RoamerX Lite stack is organized into three main modules:
 
 - **mapping state **: Control the different states of the mapping( start mapping、save map)
 
+### Localization Module (`src/localization/`)
+#### Core Localization Components
+- **fast_gicp**: Fast Global Registration algorithm for point cloud registration
+- **ndt_omp**: Normal Distributions Transform algorithm for point cloud registration
+- **localization**: Localization algorithm for robot pose estimation
+
+#### Supporting Services
+- **load pcd map**: Load 3D pcd map for localization
+
 ## 💡 Usage Examples
 
 ### Basic Navigation Commands
@@ -277,6 +286,19 @@ ros2 service call /slam_state_service robots_dog_msgs/srv/MapState "{data: 5}"
 #Note: map data is saved by default in the main directory under./jszr/map
 #      For specific operations, please refer to the readme of slam
 ```
+
+### Run Localization
+
+```bash
+# Run Robot Localization 
+ros2 launch localization localization.launch.py
+
+# Load PCD Map
+ros2 service call /load_map_service robots_dog_msgs/srv/LoadMap "{pcd_path: /your_pcd_map_path/map.pcd}"
+#Note: Please use the right pcd path and pcd file name.
+#eg: ros2 service call /load_map_service robots_dog_msgs/srv/LoadMap "{pcd_path: /home/user_name/datd/map/map.pcd}"
+```
+
 
 ## ⚙️ Configuration
 
