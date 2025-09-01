@@ -62,7 +62,7 @@ ros2 launch robot_slam mapping.launch.py 或者 ./run_slam
 ros2 service call /slam_state_service robots_dog_msgs/srv/MapState "{data: 3}"
 ```
 
-`注：运行程序后，需要发布服务才能开始建图`
+`注：默认输入雷达话题为: "/livox/lidar"，imu话题为: "/livox/imu"，qos均为best_effort,运行程序后，需要发布服务才能开始建图`
 
 
 
@@ -72,7 +72,7 @@ ros2 service call /slam_state_service robots_dog_msgs/srv/MapState "{data: 3}"
 ros2 service call /slam_state_service robots_dog_msgs/srv/MapState "{data: 5}"
 ```
 
-`注：开始键图后，当建图完成时，需要发送服务保存地图（主要包括pcd点云地图、pgm占用地图和建图轨迹.txt; 默认保存在主目录下的.jszr/map目录下）`
+`注：开始键图后，当建图完成时(终端会打印: "Save Map Success.")，需要发送服务保存地图（主要包括pcd点云地图、pgm占用地图和建图轨迹.txt; 默认保存在主目录下的.jszr/map目录下）`
 
 
 
