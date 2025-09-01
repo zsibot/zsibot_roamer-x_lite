@@ -177,14 +177,6 @@ TODO
 
 The ZsiBot RoamerX Lite stack is organized into three main modules:
 
-### 🔄 Forward Module (`src/forward/`)
-- **ecal2ros**: Bridge between eCAL and ROS2 communication systems
-- **jszr_tf**: Transform management for robot coordinate frames
-  - Base transforms
-  - Gazebo simulation transforms  
-  - Localization transforms
-  - Mujoco physics simulation support
-
 ### 📡 Interface Module (`src/interface/`)
 - **mc_sdk_rosmsgs**: Motion controller SDK message definitions
 - **robots_dog_msgs**: Comprehensive robot message types including:
