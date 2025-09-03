@@ -217,6 +217,12 @@ def generate_launch_description():
     #     output='screen'
     # )
 
+    mode_status_pub_node = Node(
+        package='robot_navigo',
+        executable='mode_status_pub',
+        output='screen'
+    )
+
     load_vel_cmd_pub_node = GroupAction(
         actions=[
             Node(
@@ -319,6 +325,7 @@ def generate_launch_description():
     # ld.add_action(odom_tf_publisher_node)
     # ld.add_action(cmd_cel_lcm_publisher_node)
     ld.add_action(load_vel_cmd_pub_node)
+    ld.add_action(mode_status_pub_node)
 
     # Add the actions to launch all of the navigation nodes
     ld.add_action(bringup_cmd)
