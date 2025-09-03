@@ -16,6 +16,8 @@ public:
         cmd_vel_sub_ = this->create_subscription<geometry_msgs::msg::Twist>("/cmd_vel", 10, std::bind(&ModeStatusPublisher::cmdVelCallback, this, std::placeholders::_1));
 
         last_cmd_vel_time_ = this->now();
+
+        RCLCPP_INFO(this->get_logger(), "ModeStatusPublisher initialized");
     }
 
 private:
