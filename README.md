@@ -143,7 +143,7 @@ rviz2 -d /path/to/your/rviz2_config.rviz
      - patrol task with multiple midpoints 
         ![patrol task with avoidance](demo_gif/patrol.gif)
 
-### 🔹 Simulation with UE + Mujoco
+### 🔹 Simulation with Zsibit-Matrix
 1. **Launch Navigation Stack:**
 ```bash
 ros2 launch robot_navigo navigation_bringup.launch.py \
