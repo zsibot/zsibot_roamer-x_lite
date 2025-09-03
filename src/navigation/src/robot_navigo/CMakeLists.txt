@@ -176,6 +176,14 @@ target_include_directories(vel_cmd_udp_pub
 )
 
 #==========================>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+add_executable(mode_status_pub
+        src/mode_status_publisher.cpp
+)
+ament_target_dependencies(mode_status_pub
+        geometry_msgs
+        rclcpp)
+
+#==========================>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 add_executable(vel_with_mc_trajectory_cmd_udp_pub
         src/vel_with_mc_trajectory_cmd_udp.cpp
 )
@@ -252,6 +260,9 @@ install(TARGETS vel_with_mc_trajectory_cmd_udp_pub
         DESTINATION lib/${PROJECT_NAME}
 )
 install(TARGETS costmap_listener
+        DESTINATION lib/${PROJECT_NAME}
+)
+install(TARGETS mode_status_pub
         DESTINATION lib/${PROJECT_NAME}
 )
 # install(TARGETS detector_node
